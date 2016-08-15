@@ -61,6 +61,7 @@ function update(){
   $("#report").html(t);
 }
 
+//Draw target image
 function draw() {
   if(counter % mod_skip_draw !== 0) return;
 
