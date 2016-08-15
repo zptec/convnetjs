@@ -79,9 +79,9 @@ function draw() {
 
       var ix = ((W*y)+x)*4;
       var r = net.forward(v);
-      g.data[ix+0] = Math.floor(255*r.w[0]);
-      g.data[ix+1] = Math.floor(255*r.w[1]);
-      g.data[ix+2] = Math.floor(255*r.w[2]);
+      g.data[ix+0] = Math.floor(255*r.w[0]); //Red
+      g.data[ix+1] = Math.floor(255*r.w[1]); //Green
+      g.data[ix+2] = Math.floor(255*r.w[2]); //Blue
       g.data[ix+3] = 255; // alpha...
     }
   }
