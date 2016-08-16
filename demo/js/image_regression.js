@@ -44,7 +44,7 @@ function update(){
       var r = [p[ix]/255.0, p[ix+1]/255.0, p[ix+2]/255.0]; // r g b
       v.w[0] = (x-W/2)/W;
       v.w[1] = (y-H/2)/H;
-      var stats = trainer.train(v, r);
+      var stats = trainer.train(v, r); //Train net by Coordinate & Color
       loss += stats.loss;
       lossi += 1;
     }
