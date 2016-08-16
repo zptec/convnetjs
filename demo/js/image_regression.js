@@ -38,7 +38,7 @@ function update(){
   for(var iters=0;iters<trainer.batch_size;iters++) {
     for(var i=0;i<N;i++) {
       // sample a coordinate
-      var x = convnetjs.randi(0, W);
+      var x = convnetjs.randi(0, W);//Get Random Coordinate for Trainning
       var y = convnetjs.randi(0, H);
       var ix = ((W*y)+x)*4;
       var r = [p[ix]/255.0, p[ix+1]/255.0, p[ix+2]/255.0]; // r g b
