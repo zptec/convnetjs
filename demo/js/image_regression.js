@@ -40,16 +40,16 @@ function update(){
       // sample a coordinate
       var x = convnetjs.randi(0, W);//Get Random Coordinate for Trainning
       var y = convnetjs.randi(0, H);
-      var ix = ((W*y)+x)*4;
-      var r = [p[ix]/255.0, p[ix+1]/255.0, p[ix+2]/255.0]; // r g b
-      v.w[0] = (x-W/2)/W;
-      v.w[1] = (y-H/2)/H;
+      var ix = ((W*y)+x)*4; //Start color data index 
+      var r = [p[ix]/255.0, p[ix+1]/255.0, p[ix+2]/255.0]; // r g b 0~1
+      v.w[0] = (x-W/2)/W; //Coordinate x -0.5~0.5
+      v.w[1] = (y-H/2)/H; //Coordinate y -0.5~0.5
       var stats = trainer.train(v, r); //Train net by Coordinate & Color
-      loss += stats.loss;
-      lossi += 1;
+      loss += stats.loss; //Add Loss of pixel
+      lossi += 1; //Increase learning count
     }
   }
-  loss /= lossi;
+  loss /= lossi; //Get Final loss
 
   if(counter === 0) smooth_loss = loss;
   else smooth_loss = 0.99*smooth_loss + 0.01*loss;
