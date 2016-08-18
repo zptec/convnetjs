@@ -58,7 +58,7 @@ function update(){
   t += 'loss: ' + smooth_loss;
   t += '<br>'
   t += 'iteration: ' + counter;
-  $("#report").html(t);
+  $("#report").html(t); //Display current loss & iteration
 }
 
 //Draw target image
