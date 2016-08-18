@@ -100,7 +100,7 @@ function tick() {
 //Reload Net
 function reload() {
   counter = 0;
-  eval($("#layerdef").val());
+  eval($("#layerdef").val());//Init layer_defs textarea
   //$("#slider").slider("value", Math.log(trainer.learning_rate) / Math.LN10);
   //$("#lr").html('Learning rate: ' + trainer.learning_rate);
 }
