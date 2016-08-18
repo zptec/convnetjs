@@ -72,11 +72,11 @@ function draw() {
 
   var g = nn_ctx.getImageData(0, 0, W, H);
   var v = new convnetjs.Vol(1, 1, 2);
-  for(var x=0;x<W;x++) {
+  //Forward Net for each coordinate to get full image
+  for(var x=0;x<W;x++) { //Loop for each x coordinate
     v.w[0] = (x-W/2)/W;
-    for(var y=0;y<H;y++) {
+    for(var y=0;y<H;y++) { //Loop for each y coordinate
       v.w[1] = (y-H/2)/H;
-
       var ix = ((W*y)+x)*4; // Start color data index 
       var r = net.forward(v); //Input coordinate and get forward color output 
       g.data[ix+0] = Math.floor(255*r.w[0]); //Red
@@ -128,7 +128,7 @@ $(function() {
       oridata = ori_ctx.getImageData(0, 0, sz, sz); // grab the data pointer. Our dataset.
 
       // start the regression!
-      setInterval(tick, 1);
+      setInterval(tick, 1); //Tick per 1 ms
     }
     image.src = "imgs/cat.jpg";
 
