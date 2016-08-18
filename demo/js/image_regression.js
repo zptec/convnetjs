@@ -29,9 +29,9 @@ function update(){
   var W = nn_canvas.width;
   var H = nn_canvas.height;
 
-  var p = oridata.data;
+  var p = oridata.data;// Original Color Data
 
-  var v = new convnetjs.Vol(1,1,2);
+  var v = new convnetjs.Vol(1,1,2); 
   var loss = 0;
   var lossi = 0;
   var N = batches_per_iteration;
@@ -41,9 +41,9 @@ function update(){
       var x = convnetjs.randi(0, W);//Get Random Coordinate for Trainning
       var y = convnetjs.randi(0, H);
       var ix = ((W*y)+x)*4; //Start color data index 
-      var r = [p[ix]/255.0, p[ix+1]/255.0, p[ix+2]/255.0]; // r g b 0~1
-      v.w[0] = (x-W/2)/W; //Coordinate x -0.5~0.5
-      v.w[1] = (y-H/2)/H; //Coordinate y -0.5~0.5
+      var r = [p[ix]/255.0, p[ix+1]/255.0, p[ix+2]/255.0]; //Get r g b value 0~1
+      v.w[0] = (x-W/2)/W; //Get Coordinate x -0.5~0.5
+      v.w[1] = (y-H/2)/H; //Get Coordinate y -0.5~0.5
       var stats = trainer.train(v, r); //Train net by Coordinate & Color
       loss += stats.loss; //Add Loss of pixel
       lossi += 1; //Increase learning count
@@ -77,8 +77,8 @@ function draw() {
     for(var y=0;y<H;y++) {
       v.w[1] = (y-H/2)/H;
 
-      var ix = ((W*y)+x)*4;
-      var r = net.forward(v);
+      var ix = ((W*y)+x)*4; // Start color data index 
+      var r = net.forward(v); //Input coordinate and get forward color output 
       g.data[ix+0] = Math.floor(255*r.w[0]); //Red
       g.data[ix+1] = Math.floor(255*r.w[1]); //Green
       g.data[ix+2] = Math.floor(255*r.w[2]); //Blue
