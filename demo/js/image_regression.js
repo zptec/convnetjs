@@ -31,7 +31,7 @@ function update(){
 
   var p = oridata.data;// Original Color Data
 
-  var v = new convnetjs.Vol(1,1,2); 
+  var v = new convnetjs.Vol(1,1,2);  //Input: out_sx:1, out_sy:1, out_depth:2
   var loss = 0;
   var lossi = 0;
   var N = batches_per_iteration;
@@ -41,7 +41,7 @@ function update(){
       var x = convnetjs.randi(0, W);//Get Random Coordinate for Trainning
       var y = convnetjs.randi(0, H);
       var ix = ((W*y)+x)*4; //Start color data index 
-      var r = [p[ix]/255.0, p[ix+1]/255.0, p[ix+2]/255.0]; //Get r g b value 0~1
+      var r = [p[ix]/255.0, p[ix+1]/255.0, p[ix+2]/255.0]; //Output: Color of original image  ( r g b value 0~1 )
       v.w[0] = (x-W/2)/W; //Get Coordinate x -0.5~0.5
       v.w[1] = (y-H/2)/H; //Get Coordinate y -0.5~0.5
       var stats = trainer.train(v, r); //Train net by Coordinate & Color
@@ -71,7 +71,7 @@ function draw() {
   var H = nn_canvas.height;
 
   var g = nn_ctx.getImageData(0, 0, W, H);
-  var v = new convnetjs.Vol(1, 1, 2);
+  var v = new convnetjs.Vol(1, 1, 2); //Input: out_sx:1, out_sy:1, out_depth:2
   //Forward Net for each coordinate to get full image
   for(var x=0;x<W;x++) { //Loop for each x coordinate
     v.w[0] = (x-W/2)/W;
@@ -85,7 +85,7 @@ function draw() {
       g.data[ix+3] = 255; // alpha...
     }
   }
-  nn_ctx.putImageData(g, 0, 0);
+  nn_ctx.putImageData(g, 0, 0); //Put Target Image data
 }
 
 function tick() {
