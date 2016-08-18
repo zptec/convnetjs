@@ -175,6 +175,7 @@ $(function() {
       fr.readAsDataURL(f);
     });
     
+    //Choose a new origin image from gallery
     $('.ci').click(function(){
       var src = $(this).attr('src');
       ori_ctx.drawImage(this, 0, 0, sz, sz);
