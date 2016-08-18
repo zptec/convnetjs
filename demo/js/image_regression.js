@@ -24,6 +24,7 @@ var batches_per_iteration = 100;
 var mod_skip_draw = 100;
 var smooth_loss = -1;
 
+//Use origin Image to train net 
 function update(){
   // forward prop the data
   var W = nn_canvas.width;
@@ -35,6 +36,7 @@ function update(){
   var loss = 0;
   var lossi = 0;
   var N = batches_per_iteration;
+  //Train Net for bach random coordinate and pixel color
   for(var iters=0;iters<trainer.batch_size;iters++) {
     for(var i=0;i<N;i++) {
       // sample a coordinate
@@ -44,7 +46,7 @@ function update(){
       var r = [p[ix]/255.0, p[ix+1]/255.0, p[ix+2]/255.0]; //Output: Color of original image  ( r g b value 0~1 )
       v.w[0] = (x-W/2)/W; //Get Coordinate x -0.5~0.5
       v.w[1] = (y-H/2)/H; //Get Coordinate y -0.5~0.5
-      var stats = trainer.train(v, r); //Train net by Coordinate & Color
+      var stats = trainer.train(v, r); //Train net by Coordinate(Input) & Color(Output)
       loss += stats.loss; //Add Loss of pixel
       lossi += 1; //Increase learning count
     }
@@ -88,18 +90,22 @@ function draw() {
   nn_ctx.putImageData(g, 0, 0); //Put Target Image data
 }
 
+//Tick to train and draw
 function tick() {
   update();
   draw();
   counter += 1; //Increase Tick Count
 }
 
+//Reload Net
 function reload() {
   counter = 0;
   eval($("#layerdef").val());
   //$("#slider").slider("value", Math.log(trainer.learning_rate) / Math.LN10);
   //$("#lr").html('Learning rate: ' + trainer.learning_rate);
 }
+
+//Switch learning rate
 function refreshSwatch() {
   var lr = $("#slider").slider("value");
   trainer.learning_rate = Math.pow(10, lr);
@@ -109,6 +115,7 @@ function refreshSwatch() {
 var ori_canvas, nn_canvas, ori_ctx, nn_ctx, oridata;
 var sz = 200; // size of our drawing area
 var counter = 0;
+//All Functions definitions
 $(function() {
     // dynamically load lena image into original image canvas
     var image = new Image();
