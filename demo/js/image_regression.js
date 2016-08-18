@@ -115,11 +115,13 @@ function refreshSwatch() {
 var ori_canvas, nn_canvas, ori_ctx, nn_ctx, oridata;
 var sz = 200; // size of our drawing area
 var counter = 0;
-//All Functions definitions
+//Function definitions
 $(function() {
     // dynamically load lena image into original image canvas
     var image = new Image();
     //image.src = "lena.png";
+    
+    //Load canvas & set original pics & Start Timmer
     image.onload = function() {
 
       ori_canvas = document.getElementById('canv_original');
