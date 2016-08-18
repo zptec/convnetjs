@@ -51,8 +51,8 @@ function update(){
   }
   loss /= lossi; //Get Final loss
 
-  if(counter === 0) smooth_loss = loss;
-  else smooth_loss = 0.99*smooth_loss + 0.01*loss;
+  if(counter === 0) smooth_loss = loss; //First tick, assign loss to smooth_loss
+  else smooth_loss = 0.99*smooth_loss + 0.01*loss; //Next Tick, add 1% effect to smooth_loss based on current loss
 
   var t = '';
   t += 'loss: ' + smooth_loss;
@@ -91,7 +91,7 @@ function draw() {
 function tick() {
   update();
   draw();
-  counter += 1;
+  counter += 1; //Increase Tick Count
 }
 
 function reload() {
