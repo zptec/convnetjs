@@ -158,7 +158,8 @@ $(function() {
       change: refreshSwatch
     });
     $("#lr").html('Learning rate: ' + trainer.learning_rate);
-
+    
+    //Pick a new file as origin image
     $("#f").on('change', function(ev) {
       var f = ev.target.files[0];
       var fr = new FileReader();
@@ -173,7 +174,7 @@ $(function() {
       };
       fr.readAsDataURL(f);
     });
-
+    
     $('.ci').click(function(){
       var src = $(this).attr('src');
       ori_ctx.drawImage(this, 0, 0, sz, sz);
