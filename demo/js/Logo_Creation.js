@@ -86,6 +86,41 @@ function draw() {
       g.data[ix+3] = 255; // alpha...
     }
   }
+    //Draw bezier path on Logo Creation Canvasv
+    //var pathSVG = new Path2D("M0 0 C");
+
+  lo_ctx.fillStyle = "Write";
+  lo_ctx.fillRect(0,0,W,H);
+  lo_ctx.fillStyle = "Green";
+  lo_ctx.strokeStyle = "Black";
+  lo_ctx.beginPath();
+  v.w[0] = convnetjs.randi(0, W) / W - 0.5;
+  v.w[1] = convnetjs.randi(0, H) / H - 0.5;
+  var lo_forward = net.forward(v);
+  var lastX = (lo_forward.w[0] + lo_forward.w[2]) / 2 * W;
+  var lastY = (lo_forward.w[1] + lo_forward.w[2]) / 2 * H;
+  lo_ctx.moveTo(lastX, lastY);
+  var lo_forward2;
+  var lo_loop = convnetjs.randi(0, 20);
+  for (var index_curve = 0; index_curve < lo_loop + 1 ; index_curve++) {
+      var x = convnetjs.randi(0, W);
+      var y = convnetjs.randi(0, H);
+      v.w[0] = x / W - 0.5;
+      v.w[1] = y / H - 0.5;
+      lo_forward = net.forward(v);
+      x = convnetjs.randi(0, W);
+      y = convnetjs.randi(0, H);
+      v.w[0] = x / W - 0.5;
+      v.w[1] = x / W - 0.5;
+      lo_forward2 = net.forward(v);
+      lo_ctx.bezierCurveTo(lastX, lastY, lo_forward.w[2] * W, lo_forward2.w[0] * H, lo_forward2.w[1] * W, lo_forward2.w[2] * H);
+      lastX = lo_forward2.w[1] * W;
+      lastY = lo_forward2.w[2] * H;
+  }
+  lo_ctx.closePath();
+  lo_ctx.fill();
+  lo_ctx.stroke();
+
   nn_ctx.putImageData(g, 0, 0); //Put Target Image data
 }
 
@@ -111,7 +146,7 @@ function refreshSwatch() {
   $("#lr").html('Learning rate: ' + trainer.learning_rate);
 }
 
-var ori_canvas, nn_canvas, ori_ctx, nn_ctx, oridata;
+var ori_canvas, nn_canvas, lo_canvas, ori_ctx, nn_ctx, lo_ctx, oridata;
 var sz = 200; // size of our drawing area
 var counter = 0;
 //Function definitions
@@ -125,13 +160,17 @@ $(function() {
 
       ori_canvas = document.getElementById('canv_original');
       nn_canvas = document.getElementById('canv_net');
+      lo_canvas = document.getElementById('canv_creation');
       ori_canvas.width = sz;
       ori_canvas.height = sz;
       nn_canvas.width = sz;
       nn_canvas.height = sz;
+      lo_canvas.width = sz;
+      lo_canvas.height = sz;
 
       ori_ctx = ori_canvas.getContext("2d");
       nn_ctx = nn_canvas.getContext("2d");
+      lo_ctx = lo_canvas.getContext("2d");
       ori_ctx.drawImage(image, 0, 0, sz, sz);
       oridata = ori_ctx.getImageData(0, 0, sz, sz); // grab the data pointer. Our dataset.
 
