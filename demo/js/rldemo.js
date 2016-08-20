@@ -315,6 +315,7 @@
       this.prevactionix = -1;
     }
     Agent.prototype = {
+      //Get action from brain
       forward: function() {
         // in forward pass the agent simply behaves in the environment
         // create input to brain
@@ -344,6 +345,7 @@
         //this.rot1 = 0;
         //this.rot2 = 0;
       },
+      //Return walls & path reference & poison msg back
       backward: function() {
         // in backward pass agent learns.
         // compute reward 
