@@ -232,6 +232,7 @@ var draw_activations_COLOR = function(elt, A, scale, grads) {
   elt.appendChild(canv);
 }
 
+//Visualize CNNs status
 var visualize_activations = function(net, elt) {
 
   // clear the element
