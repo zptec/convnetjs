@@ -240,6 +240,7 @@ var visualize_activations = function(net, elt) {
 
   // show activations in each layer
   var N = net.layers.length;
+  // Draw each layer of net
   for(var i=0;i<N;i++) {
     var L = net.layers[i];
 
@@ -286,7 +287,7 @@ var visualize_activations = function(net, elt) {
 
     } else {
       draw_activations(activations_div, L.out_act, scale);
-    } 
+    }
 
     // visualize data gradients
     if(L.layer_type !== 'softmax' && L.layer_type !== 'input' ) {
