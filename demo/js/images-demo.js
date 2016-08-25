@@ -554,7 +554,7 @@ var step = function(sample) {
   train_elt.appendChild(document.createTextNode(t));
   train_elt.appendChild(document.createElement('br'));
 
-  // visualize activations
+  // visualize activations per 100 steps
   if(step_num % 100 === 0) {
     var vis_elt = document.getElementById("visnet");
     visualize_activations(net, vis_elt);
