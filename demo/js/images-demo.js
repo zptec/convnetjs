@@ -517,11 +517,13 @@ var step = function(sample) {
     return; // get out
   }
 
-  // train on it with network
+  // Step 1: Train Net.
+  //train on it with network
   var stats = trainer.train(x, y);
   var lossx = stats.cost_loss;
   var lossw = stats.l2_decay_loss;
 
+  // Step 2: Get perdiction
   // keep track of stats such as the average training error and loss
   var yhat = net.getPrediction();
   var train_acc = yhat === y ? 1.0 : 0.0;
@@ -574,6 +576,8 @@ var step = function(sample) {
   if((step_num % 100 === 0 && step_num > 0) || step_num===100) {
     test_predict();
   }
+
+  //Increase step
   step_num++;
 }
 
