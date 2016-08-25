@@ -87,7 +87,7 @@ function draw() {
     }
   }
     //Draw bezier path on Logo Creation Canvasv
-    //var pathSVG = new Path2D("M0 0 C");
+    var pathSVG = new Path2D("M0 0 C");
 
   lo_ctx.fillStyle = "Write";
   lo_ctx.fillRect(0,0,W,H);
