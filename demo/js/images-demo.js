@@ -570,7 +570,7 @@ var step = function(sample) {
     }
   }
 
-  // run prediction on test set
+  // run prediction on test set per 100 steps
   if((step_num % 100 === 0 && step_num > 0) || step_num===100) {
     test_predict();
   }
