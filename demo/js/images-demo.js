@@ -560,7 +560,7 @@ var step = function(sample) {
     visualize_activations(net, vis_elt);
   }
 
-  // log progress to graph, (full loss)
+  // log progress to graph, (full loss) per 200 steps
   if(step_num % 200 === 0) {
     var xa = xLossWindow.get_average();
     var xw = wLossWindow.get_average();
