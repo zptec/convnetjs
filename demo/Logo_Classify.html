@@ -275,8 +275,8 @@ var load_data_batch = function(batch_num) {
   };
   if (batch_num % 2 === 0)
       data_img_elt.src = "mnist/1/mnist_batch_" + batch_num / 2 + ".png";
-  //else
-      //data_img_elt.src = "mnist/2/mnist_batch_" + (batch_num - 1) / 2 + ".png";
+  else
+      data_img_elt.src = "mnist/2/mnist_batch_" + (batch_num - 1) / 2 + ".png";
       //draw_random_img();
 }
 
