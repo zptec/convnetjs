@@ -241,6 +241,8 @@ var load_data_batch = function(batch_num) {
     //For set 2, draw a random image
     else
     {
+        data_ctx.fillStyle = "White";
+        data_ctx.fillRect(0, 0, data_img_elt.width, data_img_elt.height);
         data_ctx.fillStyle = "Black";
         //1~10 close curves
         var curve_count = Math.floor(Math.random() * 10 + 1);
