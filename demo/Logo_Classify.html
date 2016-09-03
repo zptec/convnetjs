@@ -643,7 +643,7 @@ var genetic_start = function() {
     if (genetic_running) { btn.value = 'stop genetic' }
     else { btn.value = 'start genetic'; }
 
-    //var data_canvas = document.createElement('canvas');
+    //Draw ramdom img
     var data_canvas = document.getElementById('canvas_genetic');
     data_canvas.width = img_width;
     data_canvas.height = img_width;
@@ -677,10 +677,6 @@ var genetic_start = function() {
         data_ctx.closePath();
         data_ctx.fill();
     }
-    //img_data[batch_num] = data_ctx.getImageData(0, 0, data_canvas.width, data_canvas.height);
-    //loaded[batch_num] = true;
-    //if (batch_num <= num_batches - 1) { loaded_train_batches.push(batch_num); }
-    //console.log('finished loading data batch ' + batch_num);
 }
 
 var dump_json = function() {
