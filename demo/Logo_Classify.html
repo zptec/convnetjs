@@ -631,6 +631,18 @@ var toggle_pause = function() {
   if(paused) { btn.value = 'resume' }
   else { btn.value = 'pause'; }
 }
+
+// Whether genetic is running
+var genetic_running = false;
+
+//Start Genetic
+var genetic_start = function() {
+    genetic_running = !genetic_running;
+    var btn = document.getElementById('buttonges');
+    if (genetic_running) { btn.value = 'stop genetic' }
+    else { btn.value = 'start genetic'; }
+}
+
 var dump_json = function() {
   document.getElementById("dumpjson").value = JSON.stringify(net.toJSON());
 }
