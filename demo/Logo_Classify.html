@@ -643,39 +643,42 @@ var genetic_start = function() {
     if (genetic_running) { btn.value = 'stop genetic' }
     else { btn.value = 'start genetic'; }
 
-    //Draw ramdom img
-    var data_canvas = document.getElementById('canvas_genetic');
-    data_canvas.width = img_width;
-    data_canvas.height = img_width;
-    var data_ctx = data_canvas.getContext("2d");
-    data_ctx.fillStyle = "White";
-    data_ctx.fillRect(0, 0, img_width, img_width);
-    data_ctx.fillStyle = "Black";
-    //1~10 close curves
-    var curve_count = Math.floor(Math.random() * 3 + 1);
-    //var curve_count = 1;
-    for (var index_curve = 0; index_curve < curve_count; index_curve++) {
-        data_ctx.beginPath();
-        //1~10 curve segments
-        var segment_count = Math.floor(Math.random() * 10 + 2);
-        var random_x, random_y, random_x2, random_y2;
-        var last_x, last_y;
-        for (var index_segment = 0; index_segment < segment_count; index_segment++) {
-            random_x = Math.floor(Math.random() * img_width);
-            random_y = Math.floor(Math.random() * img_width);
-            random_x2 = Math.floor(Math.random() * img_width);
-            random_y2 = Math.floor(Math.random() * img_width);
-            //Draw first segment
-            if (index_segment === 0)
-                data_ctx.moveTo(random_x2, random_y2);
-            else
-                data_ctx.bezierCurveTo(last_x, last_y, random_x, random_y, random_x2, random_y2);
-            last_x = random_x2;
-            last_y = random_y2;
+    //Draw 15 canvas
+    for (var index_canvas = 1; index_canvas <= 15; index_canvas++) {
+        //Draw ramdom img
+        var data_canvas = document.getElementById('canvas_genetic_' + index_canvas);
+        data_canvas.width = img_width;
+        data_canvas.height = img_width;
+        var data_ctx = data_canvas.getContext("2d");
+        data_ctx.fillStyle = "White";
+        data_ctx.fillRect(0, 0, img_width, img_width);
+        data_ctx.fillStyle = "Black";
+        //1~10 close curves
+        var curve_count = Math.floor(Math.random() * 3 + 1);
+        //var curve_count = 1;
+        for (var index_curve = 0; index_curve < curve_count; index_curve++) {
+            data_ctx.beginPath();
+            //1~10 curve segments
+            var segment_count = Math.floor(Math.random() * 10 + 2);
+            var random_x, random_y, random_x2, random_y2;
+            var last_x, last_y;
+            for (var index_segment = 0; index_segment < segment_count; index_segment++) {
+                random_x = Math.floor(Math.random() * img_width);
+                random_y = Math.floor(Math.random() * img_width);
+                random_x2 = Math.floor(Math.random() * img_width);
+                random_y2 = Math.floor(Math.random() * img_width);
+                //Draw first segment
+                if (index_segment === 0)
+                    data_ctx.moveTo(random_x2, random_y2);
+                else
+                    data_ctx.bezierCurveTo(last_x, last_y, random_x, random_y, random_x2, random_y2);
+                last_x = random_x2;
+                last_y = random_y2;
+            }
+            //Close Path
+            data_ctx.closePath();
+            data_ctx.fill();
         }
-        //Close Path
-        data_ctx.closePath();
-        data_ctx.fill();
     }
 }
 
@@ -773,8 +776,20 @@ var change_net = function() {
   <div class="divsec">
   <h1>Genetic Logo</h1>
     <div id="dic_genetic_logo">
-	<canvas id="canvas_genetic" width="32" height="32">
-	</canvas>
+	<canvas id="canvas_genetic_1" width="32" height="32" />
+	<canvas id="canvas_genetic_2" width="32" height="32" />
+	<canvas id="canvas_genetic_3" width="32" height="32" />
+	<canvas id="canvas_genetic_4" width="32" height="32" />
+	<canvas id="canvas_genetic_5" width="32" height="32" />
+	<canvas id="canvas_genetic_6" width="32" height="32" />
+	<canvas id="canvas_genetic_8" width="32" height="32" />
+	<canvas id="canvas_genetic_9" width="32" height="32" />
+	<canvas id="canvas_genetic_10" width="32" height="32" />
+	<canvas id="canvas_genetic_11" width="32" height="32" />
+	<canvas id="canvas_genetic_12" width="32" height="32" />
+	<canvas id="canvas_genetic_13" width="32" height="32" />
+	<canvas id="canvas_genetic_14" width="32" height="32" />
+	<canvas id="canvas_genetic_15" width="32" height="32" />
     </div>
 	<input id="buttonges" type="submit" value="start genetic" onclick="genetic_start();" style="width:200px:height:30px;"/>
   </div>
