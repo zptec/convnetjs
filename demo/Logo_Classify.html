@@ -649,7 +649,7 @@ var genetic_start = function() {
     data_canvas.height = img_width;
     var data_ctx = data_canvas.getContext("2d");
     data_ctx.fillStyle = "White";
-    data_ctx.fillRect(0, 0, data_img_elt.width, data_img_elt.height);
+    data_ctx.fillRect(0, 0, img_width, img_width);
     data_ctx.fillStyle = "Black";
     //1~10 close curves
     var curve_count = Math.floor(Math.random() * 3 + 1);
@@ -661,10 +661,10 @@ var genetic_start = function() {
         var random_x, random_y, random_x2, random_y2;
         var last_x, last_y;
         for (var index_segment = 0; index_segment < segment_count; index_segment++) {
-            random_x = Math.floor(Math.random() * data_img_elt.width);
-            random_y = Math.floor(Math.random() * data_img_elt.height);
-            random_x2 = Math.floor(Math.random() * data_img_elt.width);
-            random_y2 = Math.floor(Math.random() * data_img_elt.height);
+            random_x = Math.floor(Math.random() * img_width);
+            random_y = Math.floor(Math.random() * img_width);
+            random_x2 = Math.floor(Math.random() * img_width);
+            random_y2 = Math.floor(Math.random() * img_width);
             //Draw first segment
             if (index_segment === 0)
                 data_ctx.moveTo(random_x2, random_y2);
