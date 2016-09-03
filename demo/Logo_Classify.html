@@ -131,6 +131,7 @@ classes_txt = ['0', '1'];
 
 var use_validation_data = true;
 var index_training_instance = 0;
+var img_width = 32;
 
 var sample_training_instance = function() {
   //Get training img count.
@@ -644,8 +645,8 @@ var genetic_start = function() {
 
     //var data_canvas = document.createElement('canvas');
     var data_canvas = document.getElementById('canvas_genetic');
-    data_canvas.width = data_img_elt.width;
-    data_canvas.height = data_img_elt.height;
+    data_canvas.width = img_width;
+    data_canvas.height = img_width;
     var data_ctx = data_canvas.getContext("2d");
     data_ctx.fillStyle = "White";
     data_ctx.fillRect(0, 0, data_img_elt.width, data_img_elt.height);
