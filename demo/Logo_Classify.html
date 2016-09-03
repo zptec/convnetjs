@@ -641,6 +641,45 @@ var genetic_start = function() {
     var btn = document.getElementById('buttonges');
     if (genetic_running) { btn.value = 'stop genetic' }
     else { btn.value = 'start genetic'; }
+
+    //var data_canvas = document.createElement('canvas');
+    var data_canvas = document.getElementById('canvas_genetic');
+    data_canvas.width = data_img_elt.width;
+    data_canvas.height = data_img_elt.height;
+    var data_ctx = data_canvas.getContext("2d");
+    data_ctx.fillStyle = "White";
+    data_ctx.fillRect(0, 0, data_img_elt.width, data_img_elt.height);
+    data_ctx.fillStyle = "Black";
+    //1~10 close curves
+    var curve_count = Math.floor(Math.random() * 3 + 1);
+    //var curve_count = 1;
+    for (var index_curve = 0; index_curve < curve_count; index_curve++) {
+        data_ctx.beginPath();
+        //1~10 curve segments
+        var segment_count = Math.floor(Math.random() * 10 + 2);
+        var random_x, random_y, random_x2, random_y2;
+        var last_x, last_y;
+        for (var index_segment = 0; index_segment < segment_count; index_segment++) {
+            random_x = Math.floor(Math.random() * data_img_elt.width);
+            random_y = Math.floor(Math.random() * data_img_elt.height);
+            random_x2 = Math.floor(Math.random() * data_img_elt.width);
+            random_y2 = Math.floor(Math.random() * data_img_elt.height);
+            //Draw first segment
+            if (index_segment === 0)
+                data_ctx.moveTo(random_x2, random_y2);
+            else
+                data_ctx.bezierCurveTo(last_x, last_y, random_x, random_y, random_x2, random_y2);
+            last_x = random_x2;
+            last_y = random_y2;
+        }
+        //Close Path
+        data_ctx.closePath();
+        data_ctx.fill();
+    }
+    //img_data[batch_num] = data_ctx.getImageData(0, 0, data_canvas.width, data_canvas.height);
+    //loaded[batch_num] = true;
+    //if (batch_num <= num_batches - 1) { loaded_train_batches.push(batch_num); }
+    //console.log('finished loading data batch ' + batch_num);
 }
 
 var dump_json = function() {
@@ -736,8 +775,8 @@ var change_net = function() {
 
   <div class="divsec">
   <h1>Genetic Logo</h1>
-    <div id="genetic_logo">
-	<canvas id="geneticgraph">
+    <div id="dic_genetic_logo">
+	<canvas id="canvas_genetic">
 	</canvas>
     </div>
 	<input id="buttonges" type="submit" value="start genetic" onclick="genetic_start();" style="width:200px:height:30px;"/>
