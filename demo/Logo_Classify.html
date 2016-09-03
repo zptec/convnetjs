@@ -511,7 +511,8 @@ var test_predict = function() {
     var t = '';
     for(var k=0;k<2;k++) {
       var col = preds[k].k===y ? 'rgb(85,187,85)' : 'rgb(187,85,85)';
-      t += '<div class=\"pp\" style=\"width:' + Math.floor(preds[k].p/n*100) + 'px; margin-left: 60px; background-color:' + col + ';\">' + classes_txt[preds[k].k] + '</div>'
+      //t += "<div class=\"pp\" style=\"width:" + Math.floor(preds[k].p/n*100) + "px; background-color:" + col + ";\">" + classes_txt[preds[k].k] + "</div>";
+
     }
     probsdiv.innerHTML = t;
     div.appendChild(probsdiv);
