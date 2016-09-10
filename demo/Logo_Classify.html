@@ -130,7 +130,7 @@ classes_txt = ['0', '1'];
 
 var use_validation_data = true;
 var index_training_instance = 0;
-var img_width = 32;
+const img_width = 32;
 
 var sample_training_instance = function() {
   //Get training img index.
@@ -163,14 +163,14 @@ var sample_training_instance = function() {
 
   // fetch the appropriate row of the training image and reshape into a Vol
   var p = img_data[b].data;
-  var x = new convnetjs.Vol(32,32,1,0.0);
-  var W = 32*32;
+  var x = new convnetjs.Vol(img_width, img_width, 1, 0.0);
+  var W = img_width * img_width;
   for(var i=0;i<W;i++) {
       //var ix = ((W * k) + i) * 4;
       var ix = i * 4;
       x.w[i] = p[ix] / 255.0;
   }
-  x = convnetjs.augment(x, 28);
+  x = convnetjs.augment(x, img_width);
 
   //var isval = use_validation_data && n%10===0 ? true : false;
   return { x: x, label: b % 2, isval: false };
@@ -194,8 +194,8 @@ var sample_test_instance = function () {
   //var n = b*3000+k;
 
   var p = img_data[b].data;
-  var x = new convnetjs.Vol(32,32,1,0.0);
-  var W = 32*32;
+  var x = new convnetjs.Vol(img_width, img_width, 1, 0.0);
+  var W = img_width * img_width;
   for(var i=0;i<W;i++) {
       //var ix = ((W * k) + i) * 4;
       var ix = i * 4;
@@ -203,7 +203,7 @@ var sample_test_instance = function () {
   }
   var xs = [];
   for(var i=0;i<4;i++) {
-    xs.push(convnetjs.augment(x, 28));
+      xs.push(convnetjs.augment(x, img_width));
   }
   // return multiple augmentations, and we will average the network over them
   // to increase performance
