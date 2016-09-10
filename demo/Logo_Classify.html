@@ -172,8 +172,8 @@ var sample_training_instance = function() {
   }
   x = convnetjs.augment(x, 28);
 
-  var isval = use_validation_data && n%10===0 ? true : false;
-  return {x:x, label: b % 2, isval:isval};
+  //var isval = use_validation_data && n%10===0 ? true : false;
+  return { x: x, label: b % 2, isval: false };
 }
 
 // sample a random testing instance
