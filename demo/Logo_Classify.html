@@ -133,16 +133,16 @@ var index_training_instance = 0;
 var img_width = 32;
 
 var sample_training_instance = function() {
-  //Get training img count.
-  var count_img = Math.ceil(loaded_train_batches.length / 2);
-  if (loaded_train_batches.length % 4 === 2)
-      count_img += 1;
-  var bi = Math.floor(Math.random() * count_img);
+  //Get training img index.
+  //var index_img = Math.ceil(loaded_train_batches.length / 2);
+  //if (loaded_train_batches.length % 4 === 2)
+  //    index_img += 1;
+  var bi = Math.floor(Math.random() * loaded_train_batches.length);
   // find an unloaded batch
-  if (bi % 2 === 0)
-      bi = bi * 2;
-  else
-      bi = bi * 2 - 1;
+  //if (bi % 2 === 0)
+  //    bi = bi * 2;
+  //else
+  //    bi = bi * 2 - 1;
   var b = loaded_train_batches[bi];
   var k = Math.floor(Math.random()*3000); // sample within the batch
   var n = b*3000+k;
@@ -180,14 +180,15 @@ var sample_training_instance = function() {
 var sample_test_instance = function () {
   
     //Get testing img count.
-    var count_img = Math.floor(loaded_train_batches.length / 2);
-    if (loaded_train_batches.length % 4 === 2)
-        count_img -= 1;
-    var bi = Math.floor(Math.random() * count_img);
-  if (bi % 2 === 0)
-      bi = bi * 2 + 2;
-  else
-      bi = bi * 2 + 1;
+    //var count_img = Math.floor(loaded_train_batches.length / 2);
+    //if (loaded_train_batches.length % 4 === 2)
+    //    count_img -= 1;
+    //var bi = Math.floor(Math.random() * count_img);
+    var bi = Math.floor(Math.random() * loaded_train_batches.length);
+  //if (bi % 2 === 0)
+  //    bi = bi * 2 + 2;
+  //else
+  //    bi = bi * 2 + 1;
   var b = loaded_train_batches[bi];
   var k = Math.floor(Math.random()*3000);
   var n = b*3000+k;
