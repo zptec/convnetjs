@@ -120,7 +120,7 @@ layer_defs.push({type:'softmax', num_classes:2});\n\
 net = new convnetjs.Net();\n\
 net.makeLayers(layer_defs);\n\
 \n\
-trainer = new convnetjs.SGDTrainer(net, {method:'adadelta', batch_size:600, l2_decay:0.001});\n\
+trainer = new convnetjs.SGDTrainer(net, {method:'adadelta', batch_size:684, l2_decay:0.001});\n\
 ";
 
 // ------------------------
@@ -210,7 +210,7 @@ var sample_test_instance = function () {
   return {x:xs, label: b % 2};
 }
 
-var num_batches = 600; // 300 training batches, 300 test samples
+var num_batches = 684; // 300 training batches, 300 test samples
 var data_img_elts = new Array(num_batches);
 var img_data = new Array(num_batches);
 var loaded = new Array(num_batches);
