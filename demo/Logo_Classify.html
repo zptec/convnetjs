@@ -732,7 +732,7 @@ var genetic_start = function() {
             preds.sort(function(a,b){return a.p<b.p ? 1:-1;}); 
             
             //Set score content of div_score_label
-            div_score_label.innerText = (preds[0].p * 100) + index_canvas;
+            div_score_label.innerText = (Math.round(preds[0].p * 100)) + index_canvas;
             //Append div_score_label to div_score
             div_score.appendChild(div_score_label);
         }
