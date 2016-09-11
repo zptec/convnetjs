@@ -643,6 +643,7 @@ var genetic_start = function() {
     var btn = document.getElementById('buttonges');
     if (genetic_running) { btn.value = 'stop genetic' }
     else { btn.value = 'start genetic'; }
+    //Clear content in div div_genetic_logos
     document.getElementById('div_genetic_logos').innerHTML = '';
     //Draw 5 Lines
     for (var index_lines = 1; index_lines <= 5; index_lines++) {
@@ -686,6 +687,10 @@ var genetic_start = function() {
                 data_ctx.fill();
             }
         }
+        //Add logos to line
+        $("#div_genetic_logos").append(div_line).fadeIn(1000);
+        //Add scores to line
+        $("#div_genetic_logos").append(div_score).fadeIn(1000);
     }
 }
 
