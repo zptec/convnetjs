@@ -705,6 +705,8 @@ var genetic_start = function() {
             div_logo.appendChild(canvas_genetic);
             //Create div_score_label
             var div_score_label = document.createElement('div');
+            //Append div_score_label to div_score
+            div_score.appendChild(div_score_label);
         }
         //Add logos to line
         $("#div_genetic_logos").append(div_logo).fadeIn(1000);
