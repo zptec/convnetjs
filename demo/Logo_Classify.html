@@ -85,6 +85,19 @@ h1 {
   padding: 5px;
   color: black;
 }
+.score canvas {
+  float: left;
+}
+.score {
+  height: 32px;
+  width: 32px;
+  display: inline-block;
+  font-size: 12px;
+  box-shadow: 0px 0px 1px 1px #EEE;
+  margin: 1px;
+  padding: 1px;
+  color: black;
+}
 .pp {
   margin: 1px;
   padding: 1px;
@@ -785,7 +798,7 @@ var change_net = function() {
 	<canvas id="canvas_genetic_18" width="32" height="32" class ="actmap"></canvas>
 	<canvas id="canvas_genetic_19" width="32" height="32" class ="actmap"></canvas>
 	<canvas id="canvas_genetic_20" width="32" height="32" class ="actmap"></canvas>
-    <div class="probsdiv">34</div> <div class="probsdiv">46</div> <div class="probsdiv">72</div>
+    <div class="score">34</div> <div class="score">46</div> <div class="score">72</div>
     </div>
 	<input id="buttonges" type="submit" value="start genetic" onclick="genetic_start();" style="width:200px:height:30px;"/>
   </div>
