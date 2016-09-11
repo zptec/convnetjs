@@ -705,6 +705,10 @@ var genetic_start = function() {
             div_logo.appendChild(canvas_genetic);
             //Create div_score_label
             var div_score_label = document.createElement('div');
+            //Set class of div_score_label
+            div_score_label.class = "score";
+            //Set score content of div_score_label
+            div_score_label.innerText = "0" + index_canvas;
             //Append div_score_label to div_score
             div_score.appendChild(div_score_label);
         }
