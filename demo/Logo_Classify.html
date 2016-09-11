@@ -658,15 +658,20 @@ var genetic_start = function() {
         //Draw 20 canvas
         for (var index_canvas = 1; index_canvas <= 20; index_canvas++) {
             //Draw ramdom img
-            if (index_lines === 1)
-                var data_canvas = document.getElementById('canvas_genetic_' + index_canvas);
-            else
-                var data_canvas = document.getElementById('canvas_genetic_l' + index_lines + '_' + index_canvas);
+            //if (index_lines === 1)
+            //    var data_canvas = document.getElementById('canvas_genetic_' + index_canvas);
+            //else
+            //    var data_canvas = document.getElementById('canvas_genetic_l' + index_lines + '_' + index_canvas);
             //Create canvas_genetic_l1_1
             var canvas_genetic = document.createElement('canvas');
-            data_canvas.width = img_width;
-            data_canvas.height = img_width;
-            var data_ctx = data_canvas.getContext("2d");
+            //Set property of canvas_genetic
+            canvas_genetic.id = "canvas_genetic_l" + index_lines + "_" + index_canvas;
+            canvas_genetic.width = img_width;
+            canvas_genetic.height = img_width;
+            canvas_genetic.class = "actmap";
+            //data_canvas.width = img_width;
+            //data_canvas.height = img_width;
+            var data_ctx = canvas_genetic.getContext("2d");
             data_ctx.fillStyle = "White";
             data_ctx.fillRect(0, 0, img_width, img_width);
             data_ctx.fillStyle = "Black";
