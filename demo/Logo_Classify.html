@@ -648,7 +648,7 @@ var genetic_start = function() {
     //Draw 5 Lines
     for (var index_lines = 1; index_lines <= 5; index_lines++) {
         //Div logos
-        var div_line = document.createElement('div');
+        var div_logo = document.createElement('div');
         //Set id of div_logo
         div_line.id = "dic_genetic_logo_l" + index_lines;
         //Div scores
@@ -696,9 +696,11 @@ var genetic_start = function() {
                 data_ctx.closePath();
                 data_ctx.fill();
             }
+            //Append canvas_genetic to div_logo
+            div_logo.appendChild(canvas_genetic);
         }
         //Add logos to line
-        $("#div_genetic_logos").append(div_line).fadeIn(1000);
+        $("#div_genetic_logos").append(div_logo).fadeIn(1000);
         //Add scores to line
         $("#div_genetic_logos").append(div_score).fadeIn(1000);
     }
