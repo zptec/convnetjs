@@ -647,6 +647,10 @@ var genetic_start = function() {
     document.getElementById('div_genetic_logos').innerHTML = '';
     //Draw 5 Lines
     for (var index_lines = 1; index_lines <= 5; index_lines++) {
+        //Div logos
+        var div_line = document.createElement('div');
+        //Div scores
+        var div_score = document.createElement('div');
         //Draw 20 canvas
         for (var index_canvas = 1; index_canvas <= 20; index_canvas++) {
             //Draw ramdom img
