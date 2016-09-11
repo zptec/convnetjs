@@ -662,6 +662,8 @@ var genetic_start = function() {
                 var data_canvas = document.getElementById('canvas_genetic_' + index_canvas);
             else
                 var data_canvas = document.getElementById('canvas_genetic_l' + index_lines + '_' + index_canvas);
+            //Create canvas_genetic_l1_1
+            var canvas_genetic = document.createElement('canvas');
             data_canvas.width = img_width;
             data_canvas.height = img_width;
             var data_ctx = data_canvas.getContext("2d");
