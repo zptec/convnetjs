@@ -656,7 +656,7 @@ var genetic_start = function() {
         //Set id of div_score
         div_score.id = "dic_genetic_score_l" + index_lines;
         //Draw 20 canvas
-        for (var index_canvas = 1; index_canvas <= 24; index_canvas++) {
+        for (var index_canvas = 1; index_canvas <= 22; index_canvas++) {
             //Draw ramdom img
             //if (index_lines === 1)
             //    var data_canvas = document.getElementById('canvas_genetic_' + index_canvas);
@@ -707,8 +707,32 @@ var genetic_start = function() {
             var div_score_label = document.createElement('div');
             //Set class of div_score_label
             div_score_label.className = "score";
+            //Get network out_depth
+            var num_classes = net.layers[net.layers.length - 1].out_depth;
+            //Forward prop it through the network
+            var aavg = new convnetjs.Vol(1, 1, num_classes, 0.0);
+            var x = new convnetjs.Vol(img_width, img_width, 1, 0.0);
+            var W = img_width * img_width;
+            var canvas_img_data = data_ctx.getImageData(0, 0, data_canvas.width, data_canvas.height);
+            for (var i = 0; i < W; i++) {
+                //var ix = ((W * k) + i) * 4; 
+                var ix = i * 4;
+                x.w[i] = canvas_img_data.data[ix] / 255.0;
+            }
+
+            // ensures we always have a list, regardless if above returns single item or list 
+            //var xs = [].concat(sample.x); 
+            //var n = xs.length; 
+            //for (var i = 0; i < 4; i++) {
+            var a = net.forward(convnetjs.augment(x, img_width));
+            aavg.addFrom(a);
+            //}
+            var preds = []; 
+            for(var k=0;k<aavg.w.length;k++) { preds.push({k:k,p:aavg.w[k]}); } 
+            preds.sort(function(a,b){return a.p<b.p ? 1:-1;}); 
+            
             //Set score content of div_score_label
-            div_score_label.innerText = "0" + index_canvas;
+            div_score_label.innerText = (preds[0].p * 100) + index_canvas;
             //Append div_score_label to div_score
             div_score.appendChild(div_score_label);
         }
