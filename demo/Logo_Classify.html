@@ -668,7 +668,7 @@ var genetic_start = function() {
             canvas_genetic.id = "canvas_genetic_l" + index_lines + "_" + index_canvas;
             canvas_genetic.width = img_width;
             canvas_genetic.height = img_width;
-            canvas_genetic.class = "actmap";
+            canvas_genetic.className = "actmap";
             //data_canvas.width = img_width;
             //data_canvas.height = img_width;
             var data_ctx = canvas_genetic.getContext("2d");
@@ -706,7 +706,7 @@ var genetic_start = function() {
             //Create div_score_label
             var div_score_label = document.createElement('div');
             //Set class of div_score_label
-            div_score_label.class = "score";
+            div_score_label.className = "score";
             //Set score content of div_score_label
             div_score_label.innerText = "0" + index_canvas;
             //Append div_score_label to div_score
