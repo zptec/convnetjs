@@ -76,13 +76,26 @@ h1 {
   float: left;
 }
 .probsdiv {
-  height: 60px;
+  height: 64px;
   width: 180px;
   display: inline-block;
   font-size: 12px;
   box-shadow: 0px 0px 2px 2px #EEE;
   margin: 5px;
   padding: 5px;
+  color: black;
+}
+.score canvas {
+  float: left;
+}
+.score {
+  height: 20px;
+  width: 30px;
+  display: inline-block;
+  font-size: 17px;
+  text-align: center;
+  box-shadow: 0px 0px 1px 1px #000;
+  margin: 2px;
   color: black;
 }
 .pp {
@@ -120,32 +133,21 @@ layer_defs.push({type:'softmax', num_classes:2});\n\
 net = new convnetjs.Net();\n\
 net.makeLayers(layer_defs);\n\
 \n\
-trainer = new convnetjs.SGDTrainer(net, {method:'adadelta', batch_size:600, l2_decay:0.001});\n\
+trainer = new convnetjs.SGDTrainer(net, {method:'adadelta', batch_size:1372, l2_decay:0.001});\n\
 ";
 
 // ------------------------
 // BEGIN MNIST SPECIFIC STUFF
 // ------------------------
-//classes_txt = ['0','1','2','3','4','5','6','7','8','9'];
 classes_txt = ['0', '1'];
 
 var use_validation_data = true;
 var index_training_instance = 0;
+const img_width = 32;
 
 var sample_training_instance = function() {
-  //Get training img count.
-  var count_img = Math.ceil(loaded_train_batches.length / 2);
-  if (loaded_train_batches.length % 4 === 2)
-      count_img += 1;
-  var bi = Math.floor(Math.random() * count_img);
-  // find an unloaded batch
-  if (bi % 2 === 0)
-      bi = bi * 2;
-  else
-      bi = bi * 2 - 1;
+  var bi = Math.floor(Math.random() * loaded_train_batches.length);
   var b = loaded_train_batches[bi];
-  var k = Math.floor(Math.random()*3000); // sample within the batch
-  var n = b*3000+k;
 
   //index of training instance
   index_training_instance = b;
@@ -163,38 +165,28 @@ var sample_training_instance = function() {
 
   // fetch the appropriate row of the training image and reshape into a Vol
   var p = img_data[b].data;
-  var x = new convnetjs.Vol(32,32,1,0.0);
-  var W = 32*32;
+  var x = new convnetjs.Vol(img_width, img_width, 1, 0.0);
+  var W = img_width * img_width;
   for(var i=0;i<W;i++) {
       //var ix = ((W * k) + i) * 4;
       var ix = i * 4;
       x.w[i] = p[ix] / 255.0;
   }
-  x = convnetjs.augment(x, 28);
+  x = convnetjs.augment(x, img_width);
 
-  var isval = use_validation_data && n%10===0 ? true : false;
-  return {x:x, label: b % 2, isval:isval};
+  //var isval = use_validation_data && n%10===0 ? true : false;
+  return { x: x, label: b % 2, isval: false };
 }
 
 // sample a random testing instance
 var sample_test_instance = function () {
   
-    //Get testing img count.
-    var count_img = Math.floor(loaded_train_batches.length / 2);
-    if (loaded_train_batches.length % 4 === 2)
-        count_img -= 1;
-    var bi = Math.floor(Math.random() * count_img);
-  if (bi % 2 === 0)
-      bi = bi * 2 + 2;
-  else
-      bi = bi * 2 + 1;
+  var bi = Math.floor(Math.random() * loaded_train_batches.length);
   var b = loaded_train_batches[bi];
-  var k = Math.floor(Math.random()*3000);
-  var n = b*3000+k;
 
   var p = img_data[b].data;
-  var x = new convnetjs.Vol(32,32,1,0.0);
-  var W = 32*32;
+  var x = new convnetjs.Vol(img_width, img_width, 1, 0.0);
+  var W = img_width * img_width;
   for(var i=0;i<W;i++) {
       //var ix = ((W * k) + i) * 4;
       var ix = i * 4;
@@ -202,14 +194,14 @@ var sample_test_instance = function () {
   }
   var xs = [];
   for(var i=0;i<4;i++) {
-    xs.push(convnetjs.augment(x, 28));
+      xs.push(convnetjs.augment(x, img_width));
   }
   // return multiple augmentations, and we will average the network over them
   // to increase performance
   return {x:xs, label: b % 2};
 }
 
-var num_batches = 600; // 300 training batches, 300 test samples
+var num_batches = 1372; // 300 training batches, 300 test samples
 var data_img_elts = new Array(num_batches);
 var img_data = new Array(num_batches);
 var loaded = new Array(num_batches);
@@ -248,30 +240,35 @@ var load_data_batch = function(batch_num) {
     data_canvas.height = data_img_elt.height;
     var data_ctx = data_canvas.getContext("2d");
      //For set 1, copy the image
-    if (batch_num % 2 === 0)
+    if (batch_num % 2 === 0) {
+        //Create Mirror Image
+        if (batch_num >= num_batches / 2) {
+            data_ctx.translate(data_img_elt.width, 0);
+            data_ctx.scale(-1, 1);
+        }
         data_ctx.drawImage(data_img_elt, 0, 0); // copy it over... bit wasteful :(
-    //For set 2, draw a random image
-    else
-    {
+    }
+        //For set 2, draw a random image
+    else {
         data_ctx.fillStyle = "White";
         data_ctx.fillRect(0, 0, data_img_elt.width, data_img_elt.height);
         data_ctx.fillStyle = "Black";
         //1~10 close curves
         var curve_count = Math.floor(Math.random() * 3 + 1);
         //var curve_count = 1;
-        for(var index_curve = 0; index_curve < curve_count; index_curve++){
+        for (var index_curve = 0; index_curve < curve_count; index_curve++) {
             data_ctx.beginPath();
             //1~10 curve segments
             var segment_count = Math.floor(Math.random() * 10 + 2);
             var random_x, random_y, random_x2, random_y2;
             var last_x, last_y;
-            for(var index_segment = 0; index_segment < segment_count; index_segment++){
+            for (var index_segment = 0; index_segment < segment_count; index_segment++) {
                 random_x = Math.floor(Math.random() * data_img_elt.width);
                 random_y = Math.floor(Math.random() * data_img_elt.height);
                 random_x2 = Math.floor(Math.random() * data_img_elt.width);
                 random_y2 = Math.floor(Math.random() * data_img_elt.height);
                 //Draw first segment
-                if(index_segment === 0)
+                if (index_segment === 0)
                     data_ctx.moveTo(random_x2, random_y2);
                 else
                     data_ctx.bezierCurveTo(last_x, last_y, random_x, random_y, random_x2, random_y2);
@@ -288,11 +285,17 @@ var load_data_batch = function(batch_num) {
     if(batch_num <= num_batches - 1) { loaded_train_batches.push(batch_num); }
     console.log('finished loading data batch ' + batch_num);
   };
-  if (batch_num % 2 === 0)
-      data_img_elt.src = "mnist/1/mnist_batch_" + batch_num / 2 + ".png";
+  if (batch_num % 2 === 0) {
+      //Add duplicate Image to create mirror
+      if (batch_num >= num_batches / 2)
+          data_img_elt.src = "mnist/1/mnist_batch_" + (batch_num / 2 - num_batches / 4) + ".png";
+      //Add origional Image
+      else
+          data_img_elt.src = "mnist/1/mnist_batch_" + batch_num / 2 + ".png";
+  }
   else
       //data_img_elt.src = "mnist/2/mnist_batch_" + (batch_num - 1) / 2 + ".png";
-      data_img_elt.src = "mnist/1/mnist_batch_1.png";
+      data_img_elt.src = "mnist/1/mnist_batch_0.png";
 }
 
 // ------------------------
@@ -511,7 +514,7 @@ var test_predict = function() {
     var t = '';
     for(var k=0;k<2;k++) {
       var col = preds[k].k===y ? 'rgb(85,187,85)' : 'rgb(187,85,85)';
-      t += '<div class=\"pp\" style=\"width:' + Math.floor(preds[k].p/n*100) + 'px; margin-left: 60px; background-color:' + col + ';\">' + classes_txt[preds[k].k] + '</div>'
+      t += '<div class=\"pp\" style=\"width:' + Math.floor(preds[k].p/n*100) + 'px; margin-left: 66px; background-color:' + col + ';\">' + classes_txt[preds[k].k] + '</div>'
     }
     probsdiv.innerHTML = t;
     div.appendChild(probsdiv);
@@ -520,7 +523,6 @@ var test_predict = function() {
     $("#testset_acc").append(div).fadeIn(1000);
   }
 }
-
 
 var lossGraph = new cnnvis.Graph();
 var xLossWindow = new cnnutil.Window(100);
@@ -631,6 +633,116 @@ var toggle_pause = function() {
   if(paused) { btn.value = 'resume' }
   else { btn.value = 'pause'; }
 }
+
+// Whether genetic is running
+var genetic_running = false;
+
+//Start Genetic
+var genetic_start = function() {
+    genetic_running = !genetic_running;
+    var btn = document.getElementById('buttonges');
+    if (genetic_running) { btn.value = 'stop genetic' }
+    else { btn.value = 'start genetic'; }
+    //Clear content in div div_genetic_logos
+    document.getElementById('div_genetic_logos').innerHTML = '';
+    //Draw 5 Lines
+    for (var index_lines = 1; index_lines <= 5; index_lines++) {
+        //Div logos
+        var div_logo = document.createElement('div');
+        //Set id of div_logo
+        div_logo.id = "dic_genetic_logo_l" + index_lines;
+        //Div scores
+        var div_score = document.createElement('div');
+        //Set id of div_score
+        div_score.id = "dic_genetic_score_l" + index_lines;
+        //Draw 20 canvas
+        for (var index_canvas = 1; index_canvas <= 22; index_canvas++) {
+            //Draw ramdom img
+            //if (index_lines === 1)
+            //    var data_canvas = document.getElementById('canvas_genetic_' + index_canvas);
+            //else
+            //    var data_canvas = document.getElementById('canvas_genetic_l' + index_lines + '_' + index_canvas);
+            //Create canvas_genetic_l1_1
+            var canvas_genetic = document.createElement('canvas');
+            //Set property of canvas_genetic
+            canvas_genetic.id = "canvas_genetic_l" + index_lines + "_" + index_canvas;
+            canvas_genetic.width = img_width;
+            canvas_genetic.height = img_width;
+            canvas_genetic.className = "actmap";
+            //data_canvas.width = img_width;
+            //data_canvas.height = img_width;
+            var data_ctx = canvas_genetic.getContext("2d");
+            data_ctx.fillStyle = "White";
+            data_ctx.fillRect(0, 0, img_width, img_width);
+            data_ctx.fillStyle = "Black";
+            //1~10 close curves
+            var curve_count = Math.floor(Math.random() * 3 + 1);
+            //var curve_count = 1;
+            for (var index_curve = 0; index_curve < curve_count; index_curve++) {
+                data_ctx.beginPath();
+                //1~10 curve segments
+                var segment_count = Math.floor(Math.random() * 10 + 2);
+                var random_x, random_y, random_x2, random_y2;
+                var last_x, last_y;
+                for (var index_segment = 0; index_segment < segment_count; index_segment++) {
+                    random_x = Math.floor(Math.random() * img_width);
+                    random_y = Math.floor(Math.random() * img_width);
+                    random_x2 = Math.floor(Math.random() * img_width);
+                    random_y2 = Math.floor(Math.random() * img_width);
+                    //Draw first segment
+                    if (index_segment === 0)
+                        data_ctx.moveTo(random_x2, random_y2);
+                    else
+                        data_ctx.bezierCurveTo(last_x, last_y, random_x, random_y, random_x2, random_y2);
+                    last_x = random_x2;
+                    last_y = random_y2;
+                }
+                //Close Path
+                data_ctx.closePath();
+                data_ctx.fill();
+            }
+            //Append canvas_genetic to div_logo
+            div_logo.appendChild(canvas_genetic);
+            //Create div_score_label
+            var div_score_label = document.createElement('div');
+            //Set class of div_score_label
+            div_score_label.className = "score";
+            //Get network out_depth
+            var num_classes = net.layers[net.layers.length - 1].out_depth;
+            //Forward prop it through the network
+            var aavg = new convnetjs.Vol(1, 1, num_classes, 0.0);
+            var x = new convnetjs.Vol(img_width, img_width, 1, 0.0);
+            var W = img_width * img_width;
+            var canvas_img_data = data_ctx.getImageData(0, 0, img_width, img_width);
+            for (var i = 0; i < W; i++) {
+                //var ix = ((W * k) + i) * 4; 
+                var ix = i * 4;
+                x.w[i] = canvas_img_data.data[ix] / 255.0;
+            }
+
+            // ensures we always have a list, regardless if above returns single item or list 
+            //var xs = [].concat(sample.x); 
+            //var n = xs.length; 
+            //for (var i = 0; i < 4; i++) {
+            var a = net.forward(convnetjs.augment(x, img_width));
+            aavg.addFrom(a);
+            //}
+            var preds = []; 
+            for(var k=0;k<aavg.w.length;k++) { preds.push({k:k,p:aavg.w[k]}); } 
+            preds.sort(function(a,b){return a.p<b.p ? 1:-1;}); 
+            
+            //Set score content of div_score_label
+            div_score_label.innerText = preds[0].k === '0' ? (Math.round(preds[0].p * 100)) : (Math.round(preds[1].p * 100));
+            //Append div_score_label to div_score
+            div_score.appendChild(div_score_label);
+        }
+        //Add logos to line
+        $("#div_genetic_logos").append(div_logo).fadeIn(1000);
+        //Add scores to line
+        $("#div_genetic_logos").append(div_score).fadeIn(1000);
+    }
+}
+
 var dump_json = function() {
   document.getElementById("dumpjson").value = JSON.stringify(net.toJSON());
 }
@@ -664,7 +776,7 @@ var change_net = function() {
 </head>
 <body>
   <div id="wrap">
-  <h2 style="text-align: center;"><a href="http://github.com/zptec/ConvNetJS">ConvNetJS</a> Genetic Logo v0.1.1</h2>
+  <h2 style="text-align: center;"><a href="http://github.com/zptec/ConvNetJS">ConvNetJS</a> Genetic Logo v0.1.2</h2>
   <h1>Description</h1>
   <p>
     This page is forked from <a href="http://github.com/karpathy/convnetjs">ConvNetJS</a> made by <a href="https://twitter.com/karpathy">@karpathy</a>.It trains a Convolutional Neural Network to recognize Logo in your browser, with nothing but Javascript. The dataset is fairly easy and one should expect to get somewhere around 99% accuracy within few minutes.
@@ -720,6 +832,12 @@ var change_net = function() {
   <div>
     <textarea id="newnet" style="width:100%; height:200px;"></textarea><br />
     <input id="buttonnn" type="submit" value="change network" onclick="change_net();" style="width:200px;height:30px;"/>
+  </div>
+
+  <div class="divsec">
+  <h1>Genetic Logo</h1>
+    <div id="div_genetic_logos"></div>
+	<input id="buttonges" type="submit" value="start genetic" onclick="genetic_start();" style="width:200px:height:30px;"/>
   </div>
 
   <div class="divsec">
