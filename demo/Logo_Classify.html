@@ -636,12 +636,12 @@ var toggle_pause = function() {
 
 // Whether genetic is running
 var genetic_running = false;
-//Count of age
-var genetic_age = 0;
+// Generation
+var generation = 0;
 
 //Start Genetic
 var genetic_start = function () {
-    genetic_age++;//Increase age
+    generation++;//Increase generation
     genetic_running = !genetic_running;
     var btn = document.getElementById('buttonges');
     if (genetic_running) { btn.value = 'stop genetic' }
