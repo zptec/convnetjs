@@ -788,13 +788,10 @@ var genetic_start = function () {
     for(var i = 0; i<scores.length; i++)
         if (scores[i] > MaxScore)
             MaxScore = scores[i];
-    //Set color of Max score to Red
+    //Mark Max score
     for(var i = 0;i<scores.length; i++)
-    {
         if(scores[i] === MaxScore)
-        {
-            document.getElementById(generation_individual_score_names[individual_index]).className = "score_max";
-        }
+            document.getElementById(generation_individual_score_names[i]).className = "score_max";
     }
 }
 
