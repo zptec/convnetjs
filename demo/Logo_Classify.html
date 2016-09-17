@@ -92,7 +92,7 @@ h1 {
   height: 20px;
   width: 30px;
   display: inline-block;
-  font-size: 17px;
+  font-size: 14px;
   text-align: center;
   box-shadow: 0px 0px 1px 1px #000;
   margin: 2px;
@@ -102,7 +102,7 @@ h1 {
   height: 20px;
   width: 30px;
   display: inline-block;
-  font-size: 17px;
+  font-size: 14px;
   text-align: center;
   box-shadow: 0px 0px 1px 1px #000;
   margin: 2px;
@@ -660,10 +660,8 @@ var genome = new Array(generation_individuals);
 var scores = new Array(generation_individuals);
 //Name of individual Score
 var generation_individual_score_names = new Array(generation_individuals);
-//Max Score
-var generation_maxscore = -1;
 //Elite clone 
-var genome_elite;
+var genome_elite = [];
 
 //Start Genetic
 var genetic_start = function () {
@@ -704,7 +702,7 @@ var genetic_start = function () {
             data_ctx.fillRect(0, 0, img_width, img_width);
             data_ctx.fillStyle = "Black";
             //Clone elite
-            if (individual_index === 0 && generation_maxscore >= 0) {
+            if (individual_index === 0 && genome_elite.length > 0) {
                 genome[individual_index] = genome_elite;
                 for (var index_curve = 0; index_curve < genome_elite.length; index_curve++) {
                     data_ctx.beginPath();
@@ -801,7 +799,7 @@ var genetic_start = function () {
             var preds = []; 
             for(var k=0;k<aavg.w.length;k++) { preds.push({k:k,p:aavg.w[k]}); } 
             preds.sort(function(a,b){return a.p<b.p ? 1:-1;}); 
-            scores[individual_index] = preds[0].k === '0' ? (Math.round(preds[0].p * 100)) : (Math.round(preds[1].p * 100));
+            scores[individual_index] = preds[0].k === '0' ? (preds[0].p * 100).toFixed(1) : (preds[1].p * 100).toFixed(1);
             //Set score content of div_score_label
             div_score_label.innerText = scores[individual_index];
             //Append div_score_label to div_score
@@ -821,12 +819,8 @@ var genetic_start = function () {
     for(var i = 0;i<scores.length; i++)
         if (scores[i] === MaxScore) {
             document.getElementById(generation_individual_score_names[i]).className = "score_max";
-            //Set generation max score
-            if (MaxScore > generation_maxscore) {
-                generation_maxscore = MaxScore;
-                //Get elite genome
-                genome_elite = genome[i];
-            }
+            //Get elite genome
+            genome_elite = genome[i];
         }
 }
 
