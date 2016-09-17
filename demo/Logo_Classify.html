@@ -92,7 +92,7 @@ h1 {
   height: 20px;
   width: 30px;
   display: inline-block;
-  font-size: 14px;
+  font-size: 12px;
   text-align: center;
   box-shadow: 0px 0px 1px 1px #000;
   margin: 2px;
@@ -102,7 +102,7 @@ h1 {
   height: 20px;
   width: 30px;
   display: inline-block;
-  font-size: 14px;
+  font-size: 12px;
   text-align: center;
   box-shadow: 0px 0px 1px 1px #000;
   margin: 2px;
@@ -799,7 +799,7 @@ var genetic_start = function () {
             var preds = []; 
             for(var k=0;k<aavg.w.length;k++) { preds.push({k:k,p:aavg.w[k]}); } 
             preds.sort(function(a,b){return a.p<b.p ? 1:-1;}); 
-            scores[individual_index] = preds[0].k === '0' ? (preds[0].p * 100).toFixed(1) : (preds[1].p * 100).toFixed(1);
+            scores[individual_index] = preds[0].k === '0' ? (preds[0].p * 100).toFixed(2) : (preds[1].p * 100).toFixed(2);
             //Set score content of div_score_label
             div_score_label.innerText = scores[individual_index];
             //Append div_score_label to div_score
@@ -813,7 +813,7 @@ var genetic_start = function () {
     //Get Max Score
     var MaxScore = -1;
     for(var i = 0; i<scores.length; i++)
-        if (scores[i] > MaxScore)
+        if (parseFloat(scores[i]) > parseFloat(MaxScore))
             MaxScore = scores[i];
     //Mark Max score
     for(var i = 0;i<scores.length; i++)
