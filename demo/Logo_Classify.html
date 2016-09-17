@@ -92,11 +92,21 @@ h1 {
   height: 20px;
   width: 30px;
   display: inline-block;
-  font-size: 17px;
+  font-size: 12px;
   text-align: center;
   box-shadow: 0px 0px 1px 1px #000;
   margin: 2px;
   color: black;
+}
+.score_max {
+  height: 20px;
+  width: 30px;
+  display: inline-block;
+  font-size: 12px;
+  text-align: center;
+  box-shadow: 0px 0px 1px 1px #000;
+  margin: 2px;
+  color: blue;
 }
 .pp {
   margin: 1px;
@@ -636,9 +646,28 @@ var toggle_pause = function() {
 
 // Whether genetic is running
 var genetic_running = false;
+// Generation
+var generation = 0;
+// Count per generation
+const generation_individuals = 50;
+//Count oer line
+const generation_individuals_per_line = 22;
+//Lines count
+const generation_lines = 5;
+//Genome
+var genome = new Array(generation_individuals);
+//Scores
+var scores = new Array(generation_individuals);
+//Name of individual Score
+var generation_individual_score_names = new Array(generation_individuals);
+//Elite clone 
+var genome_elite = [];
 
 //Start Genetic
-var genetic_start = function() {
+var genetic_start = function () {
+    generation++;//Increase generation
+    //Display generation
+    document.getElementById('div_Generation').innerText = 'Generation:' + generation;
     genetic_running = !genetic_running;
     var btn = document.getElementById('buttonges');
     if (genetic_running) { btn.value = 'stop genetic' }
@@ -646,7 +675,7 @@ var genetic_start = function() {
     //Clear content in div div_genetic_logos
     document.getElementById('div_genetic_logos').innerHTML = '';
     //Draw 5 Lines
-    for (var index_lines = 1; index_lines <= 5; index_lines++) {
+    for (var index_lines = 1; index_lines <= generation_lines; index_lines++) {
         //Div logos
         var div_logo = document.createElement('div');
         //Set id of div_logo
@@ -656,12 +685,9 @@ var genetic_start = function() {
         //Set id of div_score
         div_score.id = "dic_genetic_score_l" + index_lines;
         //Draw 20 canvas
-        for (var index_canvas = 1; index_canvas <= 22; index_canvas++) {
-            //Draw ramdom img
-            //if (index_lines === 1)
-            //    var data_canvas = document.getElementById('canvas_genetic_' + index_canvas);
-            //else
-            //    var data_canvas = document.getElementById('canvas_genetic_l' + index_lines + '_' + index_canvas);
+        for (var index_canvas = 1; index_canvas <= generation_individuals_per_line; index_canvas++) {
+            //Get individual index
+            var individual_index = (index_lines - 1) * generation_individuals_per_line + index_canvas - 1;
             //Create canvas_genetic_l1_1
             var canvas_genetic = document.createElement('canvas');
             //Set property of canvas_genetic
@@ -675,31 +701,71 @@ var genetic_start = function() {
             data_ctx.fillStyle = "White";
             data_ctx.fillRect(0, 0, img_width, img_width);
             data_ctx.fillStyle = "Black";
-            //1~10 close curves
-            var curve_count = Math.floor(Math.random() * 3 + 1);
-            //var curve_count = 1;
-            for (var index_curve = 0; index_curve < curve_count; index_curve++) {
-                data_ctx.beginPath();
-                //1~10 curve segments
-                var segment_count = Math.floor(Math.random() * 10 + 2);
-                var random_x, random_y, random_x2, random_y2;
-                var last_x, last_y;
-                for (var index_segment = 0; index_segment < segment_count; index_segment++) {
-                    random_x = Math.floor(Math.random() * img_width);
-                    random_y = Math.floor(Math.random() * img_width);
-                    random_x2 = Math.floor(Math.random() * img_width);
-                    random_y2 = Math.floor(Math.random() * img_width);
-                    //Draw first segment
-                    if (index_segment === 0)
-                        data_ctx.moveTo(random_x2, random_y2);
-                    else
-                        data_ctx.bezierCurveTo(last_x, last_y, random_x, random_y, random_x2, random_y2);
-                    last_x = random_x2;
-                    last_y = random_y2;
+            //Clone elite
+            if (individual_index === 0 && genome_elite.length > 0) {
+                genome[individual_index] = genome_elite;
+                for (var index_curve = 0; index_curve < genome_elite.length; index_curve++) {
+                    data_ctx.beginPath();
+                    var last_x, last_y;
+                    for (var index_segment = 0; index_segment < genome_elite[index_curve].length; index_segment++) {
+                        if (index_segment === 1) {
+                            data_ctx.moveTo(genome_elite[index_curve][0], genome_elite[index_curve][1]);
+                        }
+                        else if ((index_segment - 1) % 4 === 0)
+                        {
+                            data_ctx.bezierCurveTo(
+                                genome_elite[index_curve][index_segment - 5],
+                                genome_elite[index_curve][index_segment - 4],
+                                genome_elite[index_curve][index_segment - 3],
+                                genome_elite[index_curve][index_segment - 2],
+                                genome_elite[index_curve][index_segment - 1],
+                                genome_elite[index_curve][index_segment]
+                                );
+                        }
+                    }
+                    //Close Path
+                    data_ctx.closePath();
+                    data_ctx.fill();
                 }
-                //Close Path
-                data_ctx.closePath();
-                data_ctx.fill();
+            }
+            //New Babys
+            else {
+                //1~10 close curves
+                var curve_count = Math.floor(Math.random() * 3 + 1);
+                genome[individual_index] = Array(curve_count);
+                //var curve_count = 1;
+                for (var index_curve = 0; index_curve < curve_count; index_curve++) {
+                    data_ctx.beginPath();
+                    //1~10 curve segments
+                    var segment_count = Math.floor(Math.random() * 10 + 2);
+                    var random_x, random_y, random_x2, random_y2;
+                    var last_x, last_y;
+                    genome[individual_index][index_curve] = [];
+                    for (var index_segment = 0; index_segment < segment_count; index_segment++) {
+                        random_x = Math.floor(Math.random() * img_width);
+                        random_y = Math.floor(Math.random() * img_width);
+                        random_x2 = Math.floor(Math.random() * img_width);
+                        random_y2 = Math.floor(Math.random() * img_width);
+                        //Draw first segment
+                        if (index_segment === 0) {
+                            data_ctx.moveTo(random_x2, random_y2);
+                            genome[individual_index][index_curve].push(random_x2);
+                            genome[individual_index][index_curve].push(random_y2);
+                        }
+                        else {
+                            data_ctx.bezierCurveTo(last_x, last_y, random_x, random_y, random_x2, random_y2);
+                            genome[individual_index][index_curve].push(random_x);
+                            genome[individual_index][index_curve].push(random_y);
+                            genome[individual_index][index_curve].push(random_x2);
+                            genome[individual_index][index_curve].push(random_y2);
+                        }
+                        last_x = random_x2;
+                        last_y = random_y2;
+                    }
+                    //Close Path
+                    data_ctx.closePath();
+                    data_ctx.fill();
+                }
             }
             //Append canvas_genetic to div_logo
             div_logo.appendChild(canvas_genetic);
@@ -707,6 +773,9 @@ var genetic_start = function() {
             var div_score_label = document.createElement('div');
             //Set class of div_score_label
             div_score_label.className = "score";
+            //Set ID of div_score_label
+            div_score_label.id = "score" + individual_index;
+            generation_individual_score_names[individual_index] = div_score_label.id;
             //Get network out_depth
             var num_classes = net.layers[net.layers.length - 1].out_depth;
             //Forward prop it through the network
@@ -730,9 +799,9 @@ var genetic_start = function() {
             var preds = []; 
             for(var k=0;k<aavg.w.length;k++) { preds.push({k:k,p:aavg.w[k]}); } 
             preds.sort(function(a,b){return a.p<b.p ? 1:-1;}); 
-            
+            scores[individual_index] = preds[0].k === '0' ? (preds[0].p * 100).toFixed(2) : (preds[1].p * 100).toFixed(2);
             //Set score content of div_score_label
-            div_score_label.innerText = preds[0].k === '0' ? (Math.round(preds[0].p * 100)) : (Math.round(preds[1].p * 100));
+            div_score_label.innerText = scores[individual_index];
             //Append div_score_label to div_score
             div_score.appendChild(div_score_label);
         }
@@ -741,6 +810,18 @@ var genetic_start = function() {
         //Add scores to line
         $("#div_genetic_logos").append(div_score).fadeIn(1000);
     }
+    //Get Max Score
+    var MaxScore = -1;
+    for(var i = 0; i<scores.length; i++)
+        if (parseFloat(scores[i]) > parseFloat(MaxScore))
+            MaxScore = scores[i];
+    //Mark Max score
+    for(var i = 0;i<scores.length; i++)
+        if (scores[i] === MaxScore) {
+            document.getElementById(generation_individual_score_names[i]).className = "score_max";
+            //Get elite genome
+            genome_elite = genome[i];
+        }
 }
 
 var dump_json = function() {
@@ -836,6 +917,7 @@ var change_net = function() {
 
   <div class="divsec">
   <h1>Genetic Logo</h1>
+    <div id="div_Generation">Generation:</div>
     <div id="div_genetic_logos"></div>
 	<input id="buttonges" type="submit" value="start genetic" onclick="genetic_start();" style="width:200px:height:30px;"/>
   </div>
@@ -853,6 +935,4 @@ var change_net = function() {
   </div>  
 </body>
 </html>
-
-
 
