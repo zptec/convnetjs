@@ -705,7 +705,7 @@ var toggle_pause = function() {
 }
 
 // Whether genetic is running
-var genetic_running = false;
+var genetic_running = true;
 // Generation
 var generation = 0;
 //Count oer line
@@ -729,11 +729,11 @@ var elite_survival = [generation_individuals];
 //Has elite
 var has_elite = false;
 
-//Genetic Start
-var genetic_start = function () {
+//Genetic pause
+var genetic_pause = function () {
     genetic_running = !genetic_running;
     var btn = document.getElementById('buttonges');
-    if (genetic_running) { btn.value = 'stop genetic' }
+    if (genetic_running) { btn.value = 'pause genetic' }
     else { btn.value = 'start genetic'; }
 }
 
@@ -745,11 +745,6 @@ var genetic_step = function () {
     generation++;//Increase generation
     //Display generation
     document.getElementById('div_Generation').innerText = 'Generation:' + generation;
-
-    //genetic_running = !genetic_running;
-    //var btn = document.getElementById('buttonges');
-    //if (genetic_running) { btn.value = 'stop genetic' }
-    //else { btn.value = 'start genetic'; }
 
     //Clear content in div div_genetic_logos
     document.getElementById('div_genetic_logos').innerHTML = '';
@@ -1008,7 +1003,7 @@ var change_net = function() {
   <h1>Genetic Logo</h1>
     <div id="div_Generation">Generation:</div>
     <div id="div_genetic_logos"></div>
-	<input id="buttonges" type="submit" value="start genetic" onclick="genetic_start();" style="width:200px:height:30px;"/>
+	<input id="buttonges" type="submit" value="pause genetic" onclick="genetic_pause();" style="width:200px:height:30px;"/>
   </div>
 
   <div class="divsec">
