@@ -155,6 +155,47 @@ var use_validation_data = true;
 var index_training_instance = 0;
 const img_width = 32;
 
+//Get a random pic
+var random_pic = function () {
+    var data_canvas = document.createElement('canvas');
+    data_canvas.width = img_width;
+    data_canvas.height = img_width;
+    var data_ctx = data_canvas.getContext("2d");
+    data_ctx.fillStyle = "White";
+    data_ctx.fillRect(0, 0, img_width, img_width);
+    data_ctx.fillStyle = "Black";
+    //1~10 close curves
+    var curve_count = Math.floor(Math.random() * 3 + 1);
+    //var curve_count = 1;
+    for (var index_curve = 0; index_curve < curve_count; index_curve++) {
+        data_ctx.beginPath();
+        //1~10 curve segments
+        var segment_count = Math.floor(Math.random() * 10 + 2);
+        var random_x, random_y, random_x2, random_y2;
+        var last_x, last_y;
+        for (var index_segment = 0; index_segment < segment_count; index_segment++) {
+            random_x = Math.floor(Math.random() * img_width);
+            random_y = Math.floor(Math.random() * img_width);
+            random_x2 = Math.floor(Math.random() * img_width);
+            random_y2 = Math.floor(Math.random() * img_width);
+            //Draw first segment
+            if (index_segment === 0) {
+                data_ctx.moveTo(random_x2, random_y2);
+            }
+            else {
+                data_ctx.bezierCurveTo(last_x, last_y, random_x, random_y, random_x2, random_y2);
+            }
+            last_x = random_x2;
+            last_y = random_y2;
+        }
+        //Close Path
+        data_ctx.closePath();
+        data_ctx.fill();
+    }
+    var canvas_img_data = data_ctx.getImageData(0, 0, img_width, img_width);
+    return canvas_img_data.data;
+}
+
 var sample_training_instance = function() {
   var bi = Math.floor(Math.random() * loaded_train_batches.length);
   var b = loaded_train_batches[bi];
@@ -175,6 +216,10 @@ var sample_training_instance = function() {
 
   // fetch the appropriate row of the training image and reshape into a Vol
   var p = img_data[b].data;
+  if (b % 2 === 1) {
+      //Get a random pic
+      p = random_pic();
+  }
   var x = new convnetjs.Vol(img_width, img_width, 1, 0.0);
   var W = img_width * img_width;
   for(var i=0;i<W;i++) {
@@ -195,6 +240,10 @@ var sample_test_instance = function () {
   var b = loaded_train_batches[bi];
 
   var p = img_data[b].data;
+  if (b % 2 === 1) {
+      //Get a random pic
+      p = random_pic();
+  }
   var x = new convnetjs.Vol(img_width, img_width, 1, 0.0);
   var W = img_width * img_width;
   for(var i=0;i<W;i++) {
@@ -239,7 +288,7 @@ var start_fun = function() {
   }
   else { setTimeout(start_fun, 200); } // keep checking
 }
-
+    //todo
 var load_data_batch = function(batch_num) {
   // Load the dataset with JS in background
   data_img_elts[batch_num] = new Image();
