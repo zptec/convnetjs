@@ -723,13 +723,13 @@ var scores_acc = new Array(generation_individuals);
 //Name of individual Score
 var generation_individual_score_names = new Array(generation_individuals);
 //Elite clone 
-var genome_elite = [generation_individuals];
+var genome_parent = new Array(generation_individuals);
 //Elite Life
-var elite_life = [generation_individuals];
+var elite_life = new Array(generation_individuals);
 //Elite Survival
-var elite_survival = [generation_individuals];
+var elite_survival = new Array(generation_individuals);
 //Has elite
-var has_elite = false;
+var has_children = false;
 //Total score
 var total_score;
 
@@ -752,7 +752,7 @@ var genetic_step = function () {
 
     //Clear content in div div_genetic_logos
     document.getElementById('div_genetic_logos').innerHTML = '';
-    //Draw 5 Lines
+    //Draw 6 Lines
     for (var index_lines = 1; index_lines <= generation_lines; index_lines++) {
         //Div logos
         var div_logo = document.createElement('div');
@@ -762,7 +762,7 @@ var genetic_step = function () {
         var div_score = document.createElement('div');
         //Set id of div_score
         div_score.id = "dic_genetic_score_l" + index_lines;
-        //Draw 20 canvas
+        //Draw 22 canvas
         for (var index_canvas = 1; index_canvas <= generation_individuals_per_line; index_canvas++) {
             //Get individual index
             var individual_index = (index_lines - 1) * generation_individuals_per_line + index_canvas - 1;
@@ -780,24 +780,28 @@ var genetic_step = function () {
             data_ctx.fillRect(0, 0, img_width, img_width);
             data_ctx.fillStyle = "Black";
             //Clone elite
-            if (individual_index < (generation_individuals - 1) && has_elite) {
-                genome[individual_index] = genome_elite[individual_index];
-                for (var index_curve = 0; index_curve < genome_elite[individual_index].length; index_curve++) {
+            //if (individual_index < (generation_individuals - 1) && has_children) {
+            //Create Children
+            if (has_children) {
+                //genome[individual_index] = genome_parent[individual_index];
+                //Create Child logo
+                genome[individual_index] = CreateChild();
+                for (var index_curve = 0; index_curve < genome[individual_index].length; index_curve++) {
                     data_ctx.beginPath();
                     var last_x, last_y;
-                    for (var index_segment = 0; index_segment < genome_elite[individual_index][index_curve].length; index_segment++) {
+                    for (var index_segment = 0; index_segment < genome[individual_index][index_curve].length; index_segment++) {
                         if (index_segment === 1) {
-                            data_ctx.moveTo(genome_elite[individual_index][index_curve][individual_index], genome_elite[individual_index][index_curve][1]);
+                            data_ctx.moveTo(genome[individual_index][index_curve][individual_index], genome[individual_index][index_curve][1]);
                         }
                         else if ((index_segment - 1) % 4 === 0)
                         {
                             data_ctx.bezierCurveTo(
-                                genome_elite[individual_index][index_curve][index_segment - 5],
-                                genome_elite[individual_index][index_curve][index_segment - 4],
-                                genome_elite[individual_index][index_curve][index_segment - 3],
-                                genome_elite[individual_index][index_curve][index_segment - 2],
-                                genome_elite[individual_index][index_curve][index_segment - 1],
-                                genome_elite[individual_index][index_curve][index_segment]
+                                genome[individual_index][index_curve][index_segment - 5],
+                                genome[individual_index][index_curve][index_segment - 4],
+                                genome[individual_index][index_curve][index_segment - 3],
+                                genome[individual_index][index_curve][index_segment - 2],
+                                genome[individual_index][index_curve][index_segment - 1],
+                                genome[individual_index][index_curve][index_segment]
                                 );
                         }
                     }
@@ -806,11 +810,11 @@ var genetic_step = function () {
                     data_ctx.fill();
                 }
             }
-            //New Babys
+            //Random Initial Logo
             else {
                 //1~10 close curves
                 var curve_count = Math.floor(Math.random() * 3 + 1);
-                genome[individual_index] = Array(curve_count);
+                genome[individual_index] = new Array(curve_count);
                 //var curve_count = 1;
                 for (var index_curve = 0; index_curve < curve_count; index_curve++) {
                     data_ctx.beginPath();
@@ -914,10 +918,45 @@ var genetic_step = function () {
         }
         else {
             //Get elite genome
-            genome_elite[elite_index++] = genome[i];
+            genome_parent[elite_index++] = genome[i];
         }
     }
-    has_elite = true;
+    has_children = true;
+}
+
+//Create child logo
+var CreateChild = function () {
+    //Pick a Random score
+    var random_score = Math.random() * total_score;
+    //Pick a parent
+    var parent_index = 0;
+    for (var i = 0; i < generation_individuals; i++)
+    {
+        if (scores_acc[i] > random_score)
+        {
+            parent_index = i;
+            break;
+        }
+    }
+    //Clone Parent genome
+    //var genome_clone = genome_parent[parent_index];
+    //1~10 close curves
+    var gnome_clone = new Array(genome_parent[individual_index].length);
+    //var curve_count = 1;
+    for (var index_curve = 0; index_curve < genome_parent[individual_index].length; index_curve++) {
+        //1~10 curve segments
+        gnome_clone[index_curve] = new Array(genome_parent[individual_index][index_curve].length);
+        for (var index_point = 0; index_segment < genome_parent[individual_index][index_curve].length; index_point++) {
+            gnome_clone[index_curve][index_point] = mutate(genome_parent[individual_index][index_curve][index_point]);
+        }
+    }
+    return genome_clone;
+}
+
+//mutation Rate 5%
+var mutate = function (origin_num) {
+    var offset_num = ( Math.random() - 0.5 ) * origin_num * 0.1;
+    return origin_num + offset_num;
 }
 
 var dump_json = function() {
