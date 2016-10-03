@@ -895,32 +895,33 @@ var genetic_step = function () {
     //Get Min Score
     var MinScore = 101;
     for (var i = 0; i < scores.length; i++) {
-        if (parseFloat(scores[i]) < parseFloat(MinScore))
-            MinScore = scores[i];
+        //if (parseFloat(scores[i]) < parseFloat(MinScore))
+        //    MinScore = scores[i];
         //Get Accumulative score
         if (i === 0)
             scores_acc[i] = scores[i];
         else
             scores_acc[i] = scores_acc[i - 1] + scores[i];
+        genome_parent[i] = genome[i];
     }
     //Calculate total score
     total_score = scores_acc[scores.length - 1];
     //Index of elite
     var elite_index = 0;
     //If skiped the weakest one
-    var weak_skiped = false;
+    //var weak_skiped = false;
     //Mark Max score
-    for (var i = 0; i < scores.length; i++) {
-        //Skip the weakest one
-        if (scores[i] === MinScore && !weak_skiped) {
-            weak_skiped = true;
-            document.getElementById(generation_individual_score_names[i]).className = "score_min";
-        }
-        else {
-            //Get elite genome
-            genome_parent[elite_index++] = genome[i];
-        }
-    }
+    //for (var i = 0; i < scores.length; i++) {
+    //    //Skip the weakest one
+    //    if (scores[i] === MinScore && !weak_skiped) {
+    //        weak_skiped = true;
+    //        document.getElementById(generation_individual_score_names[i]).className = "score_min";
+    //    }
+    //    else {
+    //        //Get elite genome
+    //        genome_parent[elite_index++] = genome[i];
+    //    }
+    //}
     has_children = true;
 }
 
