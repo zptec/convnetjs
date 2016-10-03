@@ -942,13 +942,13 @@ var CreateChild = function () {
     //Clone Parent genome
     //var genome_clone = genome_parent[parent_index];
     //1~10 close curves
-    var gnome_clone = new Array(genome_parent[individual_index].length);
+    var gnome_clone = new Array(genome_parent[parent_index].length);
     //var curve_count = 1;
-    for (var index_curve = 0; index_curve < genome_parent[individual_index].length; index_curve++) {
+    for (var index_curve = 0; index_curve < genome_parent[parent_index].length; index_curve++) {
         //1~10 curve segments
-        gnome_clone[index_curve] = new Array(genome_parent[individual_index][index_curve].length);
-        for (var index_point = 0; index_segment < genome_parent[individual_index][index_curve].length; index_point++) {
-            gnome_clone[index_curve][index_point] = mutate(genome_parent[individual_index][index_curve][index_point]);
+        gnome_clone[index_curve] = new Array(genome_parent[parent_index][index_curve].length);
+        for (var index_point = 0; index_segment < genome_parent[parent_index][index_curve].length; index_point++) {
+            gnome_clone[index_curve][index_point] = mutate(genome_parent[parent_index][index_curve][index_point]);
         }
     }
     return genome_clone;
