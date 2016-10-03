@@ -730,6 +730,8 @@ var elite_life = [generation_individuals];
 var elite_survival = [generation_individuals];
 //Has elite
 var has_elite = false;
+//Total score
+var total_score;
 
 //Genetic pause
 var genetic_pause = function () {
@@ -892,12 +894,13 @@ var genetic_step = function () {
         if (parseFloat(scores[i]) < parseFloat(MinScore))
             MinScore = scores[i];
         //Get Accumulative score
-        if (i === 0) 
+        if (i === 0)
             scores_acc[i] = scores[i];
         else
             scores_acc[i] = scores_acc[i - 1] + scores[i];
-        }
     }
+    //Calculate total score
+    total_score = scores_acc[scores.length - 1];
     //Index of elite
     var elite_index = 0;
     //If skiped the weakest one
