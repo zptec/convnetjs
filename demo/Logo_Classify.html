@@ -180,7 +180,7 @@ var random_pic = function () {
     for (var index_curve = 0; index_curve < curve_count; index_curve++) {
         data_ctx.beginPath();
         //1~10 curve segments
-        var segment_count = Math.floor(Math.random() * 10 + 2);
+        var segment_count = Math.floor(Math.random() * 9 + 3);
         var random_x, random_y, random_x2, random_y2;
         var last_x, last_y;
         for (var index_segment = 0; index_segment < segment_count; index_segment++) {
@@ -328,7 +328,7 @@ var load_data_batch = function(batch_num) {
         for (var index_curve = 0; index_curve < curve_count; index_curve++) {
             data_ctx.beginPath();
             //1~10 curve segments
-            var segment_count = Math.floor(Math.random() * 10 + 2);
+            var segment_count = Math.floor(Math.random() * 9 + 3);
             var random_x, random_y, random_x2, random_y2;
             var last_x, last_y;
             for (var index_segment = 0; index_segment < segment_count; index_segment++) {
@@ -820,7 +820,7 @@ var genetic_step = function () {
                 for (var index_curve = 0; index_curve < curve_count; index_curve++) {
                     data_ctx.beginPath();
                     //1~10 curve segments
-                    var segment_count = Math.floor(Math.random() * 10 + 2);
+                    var segment_count = Math.floor(Math.random() * 9 + 3);
                     var random_x, random_y, random_x2, random_y2;
                     var last_x, last_y;
                     genome[individual_index][index_curve] = [];
@@ -957,10 +957,10 @@ var CreateChild = function () {
         //1~10 curve segments
         gnome_clone[index_curve] = [];
         for (var index_point = 0; index_point < genome_parent[parent_index][reverse_array[index_curve]].length; index_point++) {
-            if (Math.random() >= 0.05) {
+            if (Math.random() >= 0.05 || gnome_clone[index_curve].length < 6) {
                 gnome_clone[index_curve].push(mutate(genome_parent[parent_index][reverse_array[index_curve]][index_point]));
             }
-            if (Math.random() < 0.05) {
+            if (Math.random() < 0.05 && gnome_clone[index_curve].length < 30) {
                 gnome_clone[index_curve].push(Math.floor(Math.random() * img_width));
             }
         }
@@ -968,9 +968,9 @@ var CreateChild = function () {
     return gnome_clone;
 }
 
-//mutation Rate 20%
+//mutation Rate 10%
 var mutate = function (origin_num) {
-    var offset_num = (Math.random() - 0.5) * origin_num * 0.4;
+    var offset_num = (Math.random() - 0.5) * origin_num * 0.2;
     var target_num = origin_num + offset_num;
     if (target_num < 0) {
         target_num = -target_num;
